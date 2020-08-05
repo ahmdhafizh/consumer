@@ -33,18 +33,10 @@ func (s *Subscriber) RegisterSubscriber(topic string, h SubscriberHandler, confi
 	}
 
 	kConfigMap := &kafka.ConfigMap{
-		"auto.offset.reset": "earliest",
+		"bootstrap.servers": config.Address,
+		"group.id":          config.GroupName,
+		"auto.offset.reset": config.AutoOffsetReset,
 	}
-
-	if config.Address == "" {
-		config.Address = defaultAddress
-	}
-	kConfigMap.SetKey("bootstrap.servers", config.Address)
-
-	if config.GroupName == "" {
-		config.GroupName = defaultGroupName
-	}
-	kConfigMap.SetKey("group.id", config.GroupName)
 
 	if config.SASL.Enable {
 		kConfigMap.SetKey("sasl.mechanisms", config.SASL.Mechanism)
