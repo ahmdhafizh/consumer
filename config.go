@@ -35,3 +35,10 @@ func NewSubscribeConfig() *SubscribeConfig {
 
 	return c
 }
+
+// GroupName sets the group name to be used by the broker
+func GroupName(name string) SubscribeConfigFunc {
+	return func(cfg *SubscribeConfig) {
+		cfg.GroupName = name
+	}
+}

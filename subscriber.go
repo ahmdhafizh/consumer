@@ -26,7 +26,7 @@ func Newsubscriber(config *SubscribeConfig) Sub {
 }
 
 // RegisterSubscriber :nodoc:
-func (s *Subscriber) RegisterSubscriber(topic string, h SubscriberHandler, configs ...SubscribeFunc) error {
+func (s *Subscriber) RegisterSubscriber(topic string, h SubscriberHandler, configs ...SubscribeConfigFunc) error {
 	config := SubscribeConfig{}
 	for _, c := range configs {
 		c(&config)
