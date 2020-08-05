@@ -27,24 +27,19 @@ func Newsubscriber(config *SubscribeConfig) Sub {
 
 // RegisterSubscriber :nodoc:
 func (s *Subscriber) RegisterSubscriber(topic string, h SubscriberHandler, configs ...SubscribeConfigFunc) error {
-	config := SubscribeConfig{}
-	for _, c := range configs {
-		c(&config)
-	}
-
 	kConfigMap := &kafka.ConfigMap{
-		"bootstrap.servers": config.Address,
-		"group.id":          config.GroupName,
-		"auto.offset.reset": config.AutoOffsetReset,
+		"bootstrap.servers": s.config.Address,
+		"group.id":          s.config.GroupName,
+		"auto.offset.reset": s.config.AutoOffsetReset,
 	}
 
-	if config.SASL.Enable {
-		kConfigMap.SetKey("sasl.mechanisms", config.SASL.Mechanism)
-		kConfigMap.SetKey("security.protocol", config.SASL.SecurityProtocol)
-		kConfigMap.SetKey("sasl.username", config.SASL.User)
-		kConfigMap.SetKey("sasl.password", config.SASL.Password)
+	if s.config.SASL.Enable {
+		kConfigMap.SetKey("sasl.mechanisms", s.config.SASL.Mechanism)
+		kConfigMap.SetKey("security.protocol", s.config.SASL.SecurityProtocol)
+		kConfigMap.SetKey("sasl.username", s.config.SASL.User)
+		kConfigMap.SetKey("sasl.password", s.config.SASL.Password)
 	}
-
+	fmt.Println("kConfigMap", kConfigMap)
 	kConsumer, err := kafka.NewConsumer(kConfigMap)
 	if err != nil {
 		return err
